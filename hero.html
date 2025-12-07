@@ -1,0 +1,2299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SalesHive - Lead Generation for SaaS</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Prevent accidental horizontal scrolling on small devices */
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* On very small screens use a full-width overlay for better visibility */
+        @media (max-width: 420px) {
+            .nav-links {
+                width: 100%;
+                left: 0;
+                right: 0;
+                padding-top: 72px;
+                padding-left: 18px;
+                padding-right: 18px;
+            }
+            .nav-links a { padding: 16px 14px; font-size: 1.05rem; }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0e6ff 0%, #ede7f6 100%);
+            min-height: 100vh;
+            color: #1a1a1a;
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(200, 150, 255, 0.2);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffb366 0%, #ff9a44 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #8b5cf6;
+        }
+
+        .theme-toggle {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .theme-btn {
+            background: none;
+            border: none;
+            color: #555;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Hamburger (mobile) */
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            cursor: pointer;
+            color: #4b3b75;
+            padding: 6px 8px;
+        }
+
+        /* Mobile nav behavior */
+        .nav-links.open {
+            display: flex;
+        }
+
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6 0%, #d76ef6 100%);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 60px;
+        }
+
+        .hero-left {
+            flex: 1;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: #8b5cf6;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+
+        .hero-title-highlight {
+            background: linear-gradient(135deg, #8b5cf6 0%, #d76ef6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 550px;
+        }
+
+        .metrics-row {
+            display: flex;
+            gap: 40px;
+        }
+
+        .metric {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .metric-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: rgba(139, 92, 246, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .metric-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        /* Modal/Card */
+        .hero-right {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .booking-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 0;
+            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.15);
+            max-width: 580px;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            max-height: 650px;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #d76ef6 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-body {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            gap: 20px;
+            overflow: visible;
+        }
+
+        .form-left {
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calendar-right {
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-section {
+            margin-bottom: 0;
+        }
+
+        .form-section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .calendar-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 5px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #d76ef6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 7px;
+        }
+
+        .form-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            padding: 7px 9px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 0.75rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+            background: #f9f9f9;
+            height: 32px;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            background: white;
+        }
+
+        input::placeholder {
+            color: #bbb;
+            font-size: 0.8rem;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .calendar-month {
+            font-weight: 600;
+            color: #1a1a1a;
+            font-size: 0.8rem;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 6px;
+        }
+
+        .calendar-nav button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: #8b5cf6;
+            padding: 0;
+        }
+
+        .day-header {
+            text-align: center;
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: #999;
+            text-transform: uppercase;
+            padding: 4px 0;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            background: #f5f5f5;
+            color: #666;
+            min-height: 32px;
+            min-width: 32px;
+        }
+
+        .calendar-day:hover {
+            background: #e9e3ff;
+            color: #8b5cf6;
+        }
+
+        .calendar-day.today {
+            background: linear-gradient(135deg, #8b5cf6 0%, #d76ef6 100%);
+            color: white;
+        }
+
+        .cta-button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #d76ef6 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            margin-top: auto;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .cta-button::after {
+            content: ' →';
+        }
+
+        /* Floating Button */
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6 0%, #d76ef6 100%);
+            color: white;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+            transition: transform 0.3s;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 1024px) {
+            .hero-container {
+                flex-direction: column;
+                padding: 40px;
+                gap: 40px;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-right {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+            }
+
+            .nav-links {
+                gap: 20px;
+                font-size: 0.9rem;
+            }
+
+            .hero-container {
+                padding: 20px;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .metrics-row {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .booking-modal {
+                max-width: 100%;
+            }
+        }
+
+        /* Target Section Styles */
+        .target-section {
+            background: linear-gradient(135deg, #f0e6ff 0%, #ede7f6 100%);
+            padding: 80px 60px;
+        }
+
+        .target-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 80px;
+        }
+
+        .target-left {
+            flex: 1;
+        }
+
+        .target-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 25px;
+            color: #1a1a1a;
+        }
+
+        .target-subtitle {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+            max-width: 600px;
+        }
+
+        .target-right {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .decision-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            max-width: 460px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .decision-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, #8b5cf6 0%, #d76ef6 50%, #8b5cf6 100%);
+            border-radius: 16px 16px 0 0;
+            transition: height 0.3s ease;
+            z-index: 1;
+        }
+
+        .decision-card:hover::before {
+            height: 12px;
+        }
+
+        .card-content-wrapper {
+            padding: 40px 35px;
+            padding-top: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: rgba(139, 92, 246, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .card-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .card-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .card-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .checkmark {
+            color: #8b5cf6;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .target-container {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .target-title {
+                font-size: 2.2rem;
+            }
+
+            .target-section {
+                padding: 60px 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .target-section {
+                padding: 40px 20px;
+            }
+
+            .target-title {
+                font-size: 1.8rem;
+            }
+
+            .target-subtitle {
+                font-size: 0.95rem;
+            }
+
+            .decision-card {
+                padding: 30px 25px;
+            }
+        }
+
+        /* Challenge Section Styles */
+        .challenge-section {
+            background: linear-gradient(135deg, #f0e6ff 0%, #ede7f6 100%);
+            padding: 100px 60px;
+        }
+
+        .challenge-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .challenge-badge {
+            display: inline-block;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: #8b5cf6;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .challenge-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .challenge-subtitle {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .challenge-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .challenge-card {
+            background: linear-gradient(180deg, #fbf8ff 0%, #f4ecff 100%);
+            backdrop-filter: blur(8px);
+            border-radius: 14px;
+            padding: 56px 48px;
+            border: 1px solid rgba(139, 92, 246, 0.08);
+            box-shadow: 0 14px 36px rgba(139, 92, 246, 0.07), 0 8px 22px rgba(0,0,0,0.05);
+            transition: transform 0.32s cubic-bezier(.2,.9,.3,1), box-shadow 0.32s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .challenge-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(180deg, rgba(139,92,246,0.02), rgba(215,110,246,0.02));
+            z-index: 0;
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 24px 60px rgba(139, 92, 246, 0.14), 0 10px 30px rgba(0,0,0,0.06);
+        }
+
+        /* Ensure content sits above overlay */
+        .challenge-card > * { position: relative; z-index: 2; }
+
+        .challenge-card-icon {
+            font-size: 32px;
+            margin-bottom: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 72px;
+            height: 72px;
+            border-radius: 16px;
+            /* glassy purple gradient */
+            background: linear-gradient(135deg, rgba(139,92,246,0.12) 0%, rgba(215,110,246,0.08) 60%, rgba(255,255,255,0.7) 100%);
+            border: 1px solid rgba(139,92,246,0.10);
+            box-shadow: 0 8px 20px rgba(139,92,246,0.08), inset 0 1px 0 rgba(255,255,255,0.65);
+            color: #6d2fd1;
+            z-index: 2;
+        }
+
+        .challenge-card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #1a1a1a;
+        }
+
+        .challenge-card-description {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        @media (max-width: 1024px) {
+            .challenge-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
+            }
+
+            .challenge-title {
+                font-size: 2.2rem;
+            }
+
+            .challenge-section {
+                padding: 80px 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .challenge-cards-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .challenge-title {
+                font-size: 1.8rem;
+            }
+
+            .challenge-section {
+                padding: 60px 20px;
+            }
+
+            .challenge-card {
+                padding: 25px 20px;
+            }
+        }
+
+        /* Approach Section Styles */
+        .approach-section {
+            background: linear-gradient(180deg, #f6f2ff 0%, #f2ebff 100%);
+            padding: 100px 60px;
+        }
+
+        .approach-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .approach-badge {
+            display: inline-block;
+            background: rgba(139,92,246,0.08);
+            color: #8b5cf6;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+        }
+
+        .approach-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #111;
+            margin-bottom: 12px;
+        }
+
+        .approach-subtitle {
+            color: #6b6b6b;
+            max-width: 900px;
+            margin: 0 auto;
+            font-size: 1rem;
+        }
+
+        .approach-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 28px;
+            max-width: 1400px;
+            margin: 40px auto 0;
+        }
+
+        .approach-card {
+            background: linear-gradient(140deg, #fffafc 0%, #f6ebff 36%, #eef6ff 100%);
+            border-radius: 16px;
+            padding: 36px 34px;
+            border: 1px solid rgba(139,92,246,0.06);
+            box-shadow: 0 10px 30px rgba(139,92,246,0.04);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.32s cubic-bezier(.2,.9,.3,1), box-shadow 0.32s ease, background 0.35s ease;
+        }
+
+        .approach-card-inner { position: relative; z-index: 2; }
+
+        .approach-card-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 16px;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9) 0%, rgba(215,110,246,0.14) 25%, rgba(139,92,246,0.08) 55%, rgba(239,235,255,0.6) 100%);
+            border: 1px solid rgba(139,92,246,0.09);
+            color: #5a26c9;
+            box-shadow: 0 8px 18px rgba(139,92,246,0.06), inset 0 1px 0 rgba(255,255,255,0.7);
+            transition: transform 0.28s ease, box-shadow 0.28s ease, background 0.35s ease;
+        }
+
+        .approach-card::before {
+            content: '';
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            right: -40px;
+            top: -40px;
+            background: radial-gradient(circle at 30% 30%, rgba(139,92,246,0.08), rgba(215,110,246,0.02));
+            filter: blur(20px);
+            z-index: 1;
+            transition: opacity 0.3s ease, transform 0.35s ease;
+            opacity: 0.9;
+        }
+
+        .approach-card:hover {
+            transform: translateY(-10px) rotate(-0.2deg);
+            box-shadow: 0 28px 70px rgba(139,92,246,0.12), 0 12px 30px rgba(0,0,0,0.08);
+            background: linear-gradient(120deg, #fff9ff 0%, #f2e6ff 30%, #e9f3ff 100%);
+        }
+
+        .approach-card:hover .approach-card-icon {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 28px rgba(139,92,246,0.12), inset 0 1px 0 rgba(255,255,255,0.75);
+            background: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.95) 0%, rgba(215,110,246,0.18) 20%, rgba(139,92,246,0.12) 50%, rgba(239,235,255,0.6) 100%);
+        }
+
+        .approach-link { transition: color 0.2s ease, transform 0.18s ease; display: inline-block; }
+        .approach-card:hover .approach-link { color: #5a26c9; transform: translateX(6px); }
+
+        .approach-card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #111;
+        }
+
+        .approach-card-desc {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .approach-link {
+            color: #8b5cf6;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1024px) {
+            .approach-grid { grid-template-columns: 1fr; gap: 22px; }
+            .approach-section { padding: 80px 40px; }
+            .approach-title { font-size: 2.2rem; }
+        }
+
+        @media (max-width: 768px) {
+            .approach-section { padding: 60px 20px; }
+            .approach-title { font-size: 1.8rem; }
+            .approach-card { padding: 22px; }
+        }
+
+        /* Case Study / Testimonial Section */
+        .case-section {
+            padding: 80px 60px;
+            background: linear-gradient(180deg, #f6f2ff 0%, #f3eaff 100%);
+        }
+
+        .case-wrap {
+            max-width: 1260px;
+            margin: 0 auto;
+            background: linear-gradient(180deg, rgba(255,250,253,0.98) 0%, rgba(247,241,255,0.98) 100%);
+            border-radius: 18px;
+            padding: 36px;
+            box-shadow: 0 20px 50px rgba(139,92,246,0.06);
+            border: 1px solid rgba(139,92,246,0.04);
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 36px;
+            align-items: center;
+            position: relative;
+        }
+
+        /* thin purple accent across the top of the case card */
+        .case-wrap::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            right: 12px;
+            top: 8px;
+            height: 6px;
+            border-radius: 8px 8px 0 0;
+            background: linear-gradient(90deg, #9c69f6 0%, #d76ef6 50%, #9c69f6 100%);
+            box-shadow: 0 2px 10px rgba(139,92,246,0.08);
+        }
+
+        .case-left h3.case-title {
+            font-size: 1.9rem;
+            font-weight: 800;
+            margin-bottom: 14px;
+            color: #111;
+        }
+
+        .case-left .case-badge {
+            display: inline-block;
+            background: rgba(139,92,246,0.08);
+            color: #8b5cf6;
+            padding: 8px 14px;
+            border-radius: 18px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+        }
+
+        .case-desc {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 22px;
+            max-width: 640px;
+        }
+
+        .case-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            margin-bottom: 20px;
+            max-width: 760px;
+        }
+
+        .case-metric-box {
+            background: linear-gradient(180deg, rgba(246,249,247,0.95), rgba(246,249,247,0.92));
+            border-radius: 12px;
+            padding: 22px 18px;
+            text-align: center;
+            border: 1px solid rgba(139,92,246,0.03);
+            transition: transform 0.28s ease, box-shadow 0.28s ease, background 0.28s ease, border-color 0.28s ease;
+        }
+
+        .case-metric-num {
+            font-size: 28px;
+            font-weight: 800;
+            color: #8b5cf6;
+            margin-bottom: 6px;
+        }
+
+        .case-metric-label {
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .case-metric-box:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 18px 40px rgba(139,92,246,0.10), 0 6px 18px rgba(0,0,0,0.06);
+            background: linear-gradient(180deg, rgba(255,255,255,1), rgba(245,241,255,0.96));
+            border-color: rgba(139,92,246,0.10);
+        }
+
+        .case-cta {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(139,92,246,0.12);
+            background: transparent;
+            color: #111;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .case-right {
+            padding-left: 26px;
+            border-left: 3px solid rgba(139,92,246,0.18);
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .case-quote {
+            font-style: italic;
+            color: #444;
+            line-height: 1.8;
+            font-size: 1.02rem;
+        }
+
+        .case-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .case-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #d76ef6);
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .case-author-meta {
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1024px) {
+            .case-wrap { grid-template-columns: 1fr; }
+            .case-right { border-left: none; padding-left: 0; margin-top: 10px; }
+        }
+
+        @media (max-width: 768px) {
+            .case-section { padding: 60px 20px; }
+            .case-metric-num { font-size: 22px; }
+        }
+        /* FAQ Section Styles */
+        .faq-section {
+            padding: 100px 60px;
+            background: linear-gradient(180deg, #f6f2ff 0%, #f3eaff 100%);
+            text-align: center;
+        }
+
+        .faq-badge {
+            display: inline-block;
+            background: rgba(139,92,246,0.08);
+            color: #8b5cf6;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+        }
+
+        .faq-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #111;
+            margin-bottom: 12px;
+        }
+
+        .faq-container {
+            max-width: 1000px;
+            margin: 36px auto 0;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .faq-item {
+            background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(247,242,255,0.96));
+            border-radius: 12px;
+            padding: 18px 22px;
+            box-shadow: 0 8px 18px rgba(139,92,246,0.04);
+            border: 1px solid rgba(139,92,246,0.03);
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.22s ease, box-shadow 0.22s ease;
+            display: block;
+        }
+
+        .faq-item:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(139,92,246,0.08); }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            color: #111;
+            font-size: 1rem;
+        }
+
+        .faq-chevron {
+            width: 22px;
+            height: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #8b5cf6;
+            transition: transform 0.28s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-item.open .faq-chevron { transform: rotate(180deg); }
+
+        .faq-answer {
+            color: #555;
+            margin-top: 12px;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, opacity 0.25s ease;
+            opacity: 0;
+        }
+
+        .faq-item.open .faq-answer { max-height: 400px; opacity: 1; }
+
+        @media (max-width: 1024px) {
+            .faq-title { font-size: 2.2rem; }
+            .faq-container { max-width: 720px; }
+        }
+
+        @media (max-width: 768px) {
+            .faq-section { padding: 60px 20px; }
+            .faq-title { font-size: 1.8rem; }
+        }
+
+        /* Blog / Posts Section */
+        .blog-section {
+            padding: 100px 60px;
+            background: linear-gradient(180deg, #f6f2ff 0%, #f3eaff 100%);
+            text-align: center;
+        }
+
+        .blog-badge {
+            display: inline-block;
+            background: rgba(139,92,246,0.08);
+            color: #8b5cf6;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+        }
+
+        .blog-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #111;
+            margin-bottom: 12px;
+        }
+
+        .blog-subtitle { color: #6b6b6b; max-width: 900px; margin: 0 auto; font-size: 1rem; }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            max-width: 1400px;
+            margin: 36px auto 0;
+        }
+
+        .blog-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(247,242,255,0.96));
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 12px 34px rgba(139,92,246,0.04);
+            border: 1px solid rgba(139,92,246,0.03);
+            transition: transform 0.28s ease, box-shadow 0.28s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-card:hover { transform: translateY(-10px); box-shadow: 0 30px 80px rgba(139,92,246,0.10); }
+
+        .blog-image {
+            height: 220px;
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            display: block;
+        }
+
+        .blog-card-body { padding: 20px 22px 26px; flex: 1; display: flex; flex-direction: column; }
+
+        .blog-card .blog-badge { margin-bottom: 12px; display: inline-block; }
+
+        .blog-card-title { font-size: 1.1rem; font-weight: 800; color: #111; margin-bottom: 10px; }
+
+        .blog-excerpt { color: #666; line-height: 1.6; margin-bottom: 16px; flex: 1; }
+
+        .blog-meta { color: #8b5cf6; font-weight: 700; text-decoration: none; }
+
+        @media (max-width: 1024px) {
+            .blog-grid { grid-template-columns: repeat(2, 1fr); max-width: 1000px; }
+            .blog-section { padding: 80px 40px; }
+            .blog-title { font-size: 2.2rem; }
+        }
+
+        @media (max-width: 768px) {
+            .blog-grid { grid-template-columns: 1fr; gap: 22px; }
+            .blog-section { padding: 60px 20px; }
+        }
+
+        /* CTA Booking Section */
+        .cta-section {
+            padding: 100px 60px;
+            background: linear-gradient(180deg, #f6f2ff 0%, #f3eaff 100%);
+            text-align: center;
+        }
+
+        .cta-badge {
+            display: inline-block;
+            background: rgba(139,92,246,0.08);
+            color: #8b5cf6;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+        }
+
+        .cta-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #111;
+            margin-bottom: 12px;
+        }
+
+        .cta-sub { color:#6b6b6b; margin-bottom: 28px; }
+
+        .cta-modal {
+            max-width: 760px;
+            margin: 0 auto;
+            border-radius: 14px;
+            overflow: hidden;
+            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,245,255,0.98));
+            box-shadow: 0 30px 80px rgba(139,92,246,0.06);
+            border: 1px solid rgba(139,92,246,0.04);
+        }
+
+        .cta-modal .cta-top {
+            background: linear-gradient(135deg,#9c69f6 0%, #c57af6 100%);
+            color: white;
+            padding: 18px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-align: center;
+        }
+
+        .cta-modal .cta-body {
+            display: flex;
+            gap: 20px;
+            padding: 26px;
+            align-items: stretch;
+        }
+
+        .cta-left { flex: 1; background: rgba(242,240,246,0.6); padding: 18px; border-radius: 10px; }
+        .cta-right { width: 360px; background: rgba(245,245,247,0.9); padding: 18px; border-radius: 10px; }
+
+        .cta-left h4 { margin: 8px 0 14px; font-size: 1.05rem; font-weight:700; }
+
+        .cta-left input { width: 100%; padding: 10px 12px; border-radius: 8px; border:1px solid #e6e6e6; margin-bottom: 12px; }
+
+        .cta-book-btn { display:block; width:100%; padding:12px; border-radius:8px; background: #b590f8; color:white; font-weight:800; border:none; cursor:pointer; }
+
+        .cta-calendar { display:block; }
+
+        @media (max-width: 1024px) {
+            .cta-modal { max-width: 92%; }
+            .cta-modal .cta-body { flex-direction: column; }
+            .cta-right { width: 100%; }
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: linear-gradient(135deg, #f6f0ff 0%, #e9e3f7 100%);
+            margin-top: 80px;
+            font-size: 1rem;
+            color: #3a2c5f;
+            position: relative;
+        }
+        .footer-top-bar {
+            height: 5px;
+            width: 100%;
+            background: linear-gradient(90deg, #8b5cf6 0%, #d76ef6 100%);
+            border-radius: 0 0 8px 8px;
+            margin-bottom: 0;
+        }
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            max-width: 1260px;
+            margin: 0 auto;
+            padding: 60px 40px 30px 40px;
+            justify-content: space-between;
+        }
+        .footer-col {
+            min-width: 180px;
+            flex: 1 1 200px;
+            margin-bottom: 20px;
+        }
+        .footer-brand {
+            flex: 2 1 320px;
+            min-width: 260px;
+        }
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8b5cf6 0%, #d76ef6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .footer-desc {
+            margin: 18px 0 22px 0;
+            color: #6d5a99;
+            font-size: 1.05rem;
+            line-height: 1.5;
+        }
+        .footer-contact div {
+            margin-bottom: 6px;
+            font-size: 0.98rem;
+        }
+        .footer-contact a {
+            color: #8b5cf6;
+            text-decoration: none;
+        }
+        .footer-col-title {
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: #8b5cf6;
+            font-size: 1.08rem;
+        }
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        .footer-links a {
+            color: #3a2c5f;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover {
+            color: #8b5cf6;
+        }
+        .footer-api-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #ede7f6;
+            border-radius: 8px;
+            max-width: 420px;
+            margin: 0 auto 0 auto;
+            padding: 8px 22px;
+            font-size: 0.98rem;
+            box-shadow: 0 2px 8px rgba(139,92,246,0.07);
+        }
+        .footer-api-label {
+            font-weight: 600;
+            color: #8b5cf6;
+        }
+        .footer-api-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 0 2px #b9fbc0;
+        }
+        .footer-api-status.online {
+            background: #22c55e;
+        }
+        .footer-api-status.offline {
+            background: #f87171;
+        }
+        .footer-api-text {
+            color: #3a2c5f;
+        }
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1260px;
+            margin: 0 auto;
+            padding: 24px 40px 18px 40px;
+            border-top: 1px solid #e0d7f3;
+            font-size: 0.98rem;
+        }
+        .footer-copyright {
+            color: #6d5a99;
+        }
+        .footer-socials {
+            display: flex;
+            gap: 18px;
+        }
+        .footer-social svg {
+            display: block;
+            transition: transform 0.2s;
+        }
+        .footer-social:hover svg {
+            transform: scale(1.15) rotate(-6deg);
+        }
+        @media (max-width: 900px) {
+            .footer-content, .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+            .footer-api-bar {
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
+        @media (max-width: 600px) {
+            .footer-content {
+                gap: 18px;
+                padding: 36px 10px 18px 10px;
+            }
+            .footer-bottom {
+                padding: 14px 10px 10px 10px;
+                font-size: 0.93rem;
+            }
+        }
+
+        /* Global responsive tweaks for mobile/tablet */
+        @media (max-width: 900px) {
+            .navbar { padding: 12px 20px; }
+            .nav-links { gap: 14px; }
+            .hero-container { padding: 36px 20px; gap: 18px; flex-direction: column; align-items: flex-start; }
+            .hero-title { font-size: clamp(1.75rem, 6vw, 2.6rem); }
+            .hero-badge { margin-bottom: 14px; }
+            .hero-left, .hero-right { width: 100%; }
+            .case-wrap { max-width: 100%; padding: 28px 20px; }
+            .case-left, .case-right { width: 100%; }
+            .case-right { margin-top: 18px; }
+            .card-grid, .blog-grid, .challenge-grid, .approach-grid { grid-template-columns: repeat(2, 1fr); }
+            .blog-grid .post-card, .challenge-card, .approach-card { width: 100%; }
+            .modal-body { flex-direction: column; padding: 16px; }
+            .form-left, .form-right { width: 100%; }
+            .calendar-wrap { width: 100%; }
+            .floating-btn { right: 18px; bottom: 18px; }
+            .footer-api-bar { margin: 16px auto; }
+        }
+
+        /* Mobile nav layout: hide desktop links and show hamburger */
+        @media (max-width: 900px) {
+            .hamburger { display: block; }
+            .nav-links {
+                display: flex; /* use transform to hide/show */
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 320px;
+                height: 100vh;
+                background: linear-gradient(180deg, #f7efff 0%, #efe1ff 60%, #efe1ff 100%);
+                box-shadow: -18px 0 48px rgba(40,20,80,0.12);
+                flex-direction: column;
+                padding: 84px 20px 30px 20px;
+                gap: 12px;
+                z-index: 2000;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                transform: translateX(100%);
+                transition: transform 280ms cubic-bezier(.22,.9,.33,1), opacity 180ms ease;
+                opacity: 0;
+            }
+            .nav-links li { margin: 6px 0; }
+            .nav-links a { font-size: 1.05rem; color: #3b3160; display: block; padding: 14px 12px; border-radius: 10px; background: transparent !important; }
+            .nav-links a:hover { color: #6e4bd6; background: rgba(255,255,255,0.06); }
+            .nav-links.open { transform: translateX(0); opacity: 1; }
+            .nav-links li, .nav-links a { background: transparent !important; }
+        }
+
+        /* Ensure hamburger sits above the menu for easy clicking */
+        .hamburger { z-index: 2200; position: relative; }
+        .nav-links { z-index: 2000; }
+
+        @media (max-width: 600px) {
+            body { font-size: 14px; }
+            .navbar { padding: 10px 12px; }
+            .hero-container { padding: 22px 14px; }
+            .hero-title { font-size: clamp(1.4rem, 8vw, 2.2rem); }
+            .card-grid, .blog-grid, .challenge-grid, .approach-grid { grid-template-columns: 1fr; }
+            .case-wrap { padding: 20px 12px; }
+            .modal-body { gap: 12px; }
+            .booking-modal { max-width: 96%; width: 96%; margin: 0 auto; }
+            .footer-content { padding: 20px 12px; }
+            .footer-bottom { padding: 12px; flex-direction: column; align-items: flex-start; gap: 10px; }
+            .footer-col { min-width: 100%; }
+            .footer-logo { font-size: 1.6rem; }
+        }
+
+
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">⚡ SalesHive</div>
+        <button class="hamburger" aria-label="Open menu" aria-expanded="false">☰</button>
+        <ul class="nav-links" role="menu">
+            <li role="none"><a role="menuitem" href="#services">Services</a></li>
+            <li role="none"><a role="menuitem" href="#platform">Platform</a></li>
+            <li role="none"><a role="menuitem" href="#industries">Industries</a></li>
+            <li role="none"><a role="menuitem" href="#resources">Resources</a></li>
+            <li role="none"><a role="menuitem" href="#company">Company</a></li>
+        </ul>
+        <div class="theme-toggle">
+            <div class="avatar"></div>
+            <button class="theme-btn">🌙 Dark</button>
+            <button class="theme-btn">☀️ Light</button>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <div class="hero-container">
+        <!-- Left Content -->
+        <div class="hero-left">
+            <div class="hero-badge">● SAAS & TECHNOLOGY</div>
+            <h1 class="hero-title">
+                Lead Generation for <span class="hero-title-highlight">SaaS Companies</span>
+            </h1>
+            <p class="hero-subtitle">
+                Struggling to break through the noise and reach decision-makers? Our US-based SDRs specialize in complex B2B SaaS sales cycles, booking meetings with CTOs, VPs of Engineering, and IT leaders who are actively evaluating solutions like yours.
+            </p>
+
+            <!-- Metrics -->
+            <div class="metrics-row">
+                <div class="metric">
+                    <div class="metric-icon">📈</div>
+                    <div class="metric-content">
+                        <div class="metric-value">117K+</div>
+                        <div class="metric-label">Meetings Booked</div>
+                    </div>
+                </div>
+                <div class="metric">
+                    <div class="metric-icon">👥</div>
+                    <div class="metric-content">
+                        <div class="metric-value">1500+</div>
+                        <div class="metric-label">Clients Scaled</div>
+                    </div>
+                </div>
+                <div class="metric">
+                    <div class="metric-icon">🏆</div>
+                    <div class="metric-content">
+                        <div class="metric-value">10</div>
+                        <div class="metric-label">Years in Business</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Content - Booking Modal -->
+        <div class="hero-right">
+            <div class="booking-modal">
+                <div class="modal-header">SCHEDULE A MEETING TODAY!</div>
+                <div class="modal-body">
+                    <!-- Form on Left -->
+                    <div class="form-left">
+                        <h3 style="margin-bottom: 12px; color: #1a1a1a; font-size: 0.9rem;">Enter Your Details</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="email" placeholder="Work Email*" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" placeholder="First Name*" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" placeholder="Last Name*" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" placeholder="Job Title*" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" placeholder="Company Name*" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calendar on Right -->
+                    <div class="calendar-right">
+                        <div class="form-section-title">
+                            <div class="calendar-icon">📅</div>
+                            <span>Select Date & Time</span>
+                        </div>
+                        <div class="calendar-header">
+                            <span class="calendar-month">December 2025</span>
+                            <div class="calendar-nav">
+                                <button>‹</button>
+                                <button>›</button>
+                            </div>
+                        </div>
+                        <div class="calendar-grid">
+                            <div class="day-header">MON</div>
+                            <div class="day-header">TUE</div>
+                            <div class="day-header">WED</div>
+                            <div class="day-header">THU</div>
+                            <div class="day-header">FRI</div>
+                            <div class="day-header">SAT</div>
+                            <div class="day-header">SUN</div>
+                            <div class="calendar-day" style="opacity: 0.5;">26</div>
+                            <div class="calendar-day" style="opacity: 0.5;">27</div>
+                            <div class="calendar-day" style="opacity: 0.5;">28</div>
+                            <div class="calendar-day" style="opacity: 0.5;">29</div>
+                            <div class="calendar-day" style="opacity: 0.5;">30</div>
+                            <div class="calendar-day">1</div>
+                            <div class="calendar-day">2</div>
+                            <div class="calendar-day">3</div>
+                            <div class="calendar-day">4</div>
+                            <div class="calendar-day">5</div>
+                            <div class="calendar-day">6</div>
+                            <div class="calendar-day">7</div>
+                            <div class="calendar-day">8</div>
+                            <div class="calendar-day">9</div>
+                            <div class="calendar-day">10</div>
+                            <div class="calendar-day">11</div>
+                            <div class="calendar-day">12</div>
+                            <div class="calendar-day">13</div>
+                            <div class="calendar-day">14</div>
+                            <div class="calendar-day">15</div>
+                            <div class="calendar-day">16</div>
+                            <div class="calendar-day">17</div>
+                            <div class="calendar-day">18</div>
+                            <div class="calendar-day">19</div>
+                            <div class="calendar-day">20</div>
+                            <div class="calendar-day">21</div>
+                            <div class="calendar-day">22</div>
+                            <div class="calendar-day">23</div>
+                            <div class="calendar-day">24</div>
+                            <div class="calendar-day today">25</div>
+                            <div class="calendar-day">26</div>
+                            <div class="calendar-day">27</div>
+                            <div class="calendar-day">28</div>
+                            <div class="calendar-day">29</div>
+                            <div class="calendar-day">30</div>
+                            <div class="calendar-day">31</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA Button -->
+                <div style="padding: 0 25px 20px 25px;">
+                    <button class="cta-button">BOOK MY CALL</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Section - Target Buyers -->
+    <section class="target-section">
+        <div class="target-container">
+            <!-- Left Content -->
+            <div class="target-left">
+                <h2 class="target-title">We Target Your Ideal SaaS Buyers</h2>
+                <p class="target-subtitle">Our SDRs are trained to engage technical decision-makers at every level of the buying committee, from hands-on engineers to C-suite executives.</p>
+            </div>
+
+            <!-- Right Content - Card -->
+            <div class="target-right">
+                <div class="decision-card">
+                    <div class="card-content-wrapper">
+                        <div class="card-header">
+                            <div class="card-icon">🎯</div>
+                            <h3 class="card-title">Decision-Makers We Reach</h3>
+                        </div>
+                        <ul class="card-list">
+                            <li><span class="checkmark">✓</span> CTOs & VP of Engineering</li>
+                            <li><span class="checkmark">✓</span> IT Directors & Managers</li>
+                            <li><span class="checkmark">✓</span> Product & DevOps Leaders</li>
+                            <li><span class="checkmark">✓</span> Security & Compliance Officers</li>
+                            <li><span class="checkmark">✓</span> Procurement & Vendor Managers</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fourth Section - How We Generate Leads (Approach) -->
+    <section class="approach-section">
+        <div class="approach-header">
+            <div class="approach-badge">OUR APPROACH</div>
+            <h2 class="approach-title">How We Generate Leads for SaaS</h2>
+            <p class="approach-subtitle">Purpose-built outbound strategies that resonate with technical buyers.</p>
+        </div>
+
+        <div class="approach-grid">
+            <div class="approach-card">
+                <div class="approach-card-inner">
+                    <div class="approach-card-icon">📘</div>
+                    <h3 class="approach-card-title">Technical Deep-Dive Discovery</h3>
+                    <p class="approach-card-desc">We spend 2-3 weeks learning your product, value props, and competitive landscape. Our SDRs can speak intelligently about APIs, integrations, security, and technical architecture.</p>
+                    <a class="approach-link" href="#">Learn More →</a>
+                </div>
+            </div>
+
+            <div class="approach-card">
+                <div class="approach-card-inner">
+                    <div class="approach-card-icon">💬</div>
+                    <h3 class="approach-card-title">AI-Personalized Messaging</h3>
+                    <p class="approach-card-desc">Our eMod AI researches each prospect's company, tech stack, and recent news to craft hyper-relevant emails that reference specific pain points and opportunities.</p>
+                    <a class="approach-link" href="#">Explore eMod →</a>
+                </div>
+            </div>
+
+            <div class="approach-card">
+                <div class="approach-card-inner">
+                    <div class="approach-card-icon">📞</div>
+                    <h3 class="approach-card-title">Multi-Threaded Outreach</h3>
+                    <p class="approach-card-desc">We target multiple stakeholders in each account—technical evaluators, end users, and executives—building consensus across the buying committee before your first demo.</p>
+                    <a class="approach-link" href="#">Cold Calling →</a>
+                </div>
+            </div>
+
+            <div class="approach-card">
+                <div class="approach-card-inner">
+                    <div class="approach-card-icon">📋</div>
+                    <h3 class="approach-card-title">Premium Data & List Building</h3>
+                    <p class="approach-card-desc">We build custom prospect lists using ZoomInfo, Apollo, and proprietary databases. Every contact is verified for accuracy, ensuring your outreach reaches real decision-makers.</p>
+                    <a class="approach-link" href="#">List Building →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Third Section - The Challenge -->
+    <section class="challenge-section">
+        <div class="challenge-header">
+            <div class="challenge-badge">THE CHALLENGE</div>
+            <h2 class="challenge-title">Why SaaS Sales Development is Hard</h2>
+            <p class="challenge-subtitle">Technical buyers have unique objections and priorities. Here's what makes reaching them so difficult.</p>
+        </div>
+
+        <div class="challenge-cards-grid">
+            <!-- Card 1 -->
+            <div class="challenge-card">
+                <div class="challenge-card-icon">🛡️</div>
+                <h3 class="challenge-card-title">Gatekeepers & Spam Filters</h3>
+                <p class="challenge-card-description">Technical decision-makers are bombarded with 100+ cold emails daily. Most never make it past spam filters, and those that do get deleted unread.</p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="challenge-card">
+                <div class="challenge-card-icon">⏱️</div>
+                <h3 class="challenge-card-title">Long Sales Cycles</h3>
+                <p class="challenge-card-description">Enterprise SaaS deals take 6-18 months to close. Without consistent pipeline generation, revenue becomes unpredictable and growth stalls.</p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="challenge-card">
+                <div class="challenge-card-icon">👥</div>
+                <h3 class="challenge-card-title">Complex Buying Committees</h3>
+                <p class="challenge-card-description">SaaS purchases involve 6-10 stakeholders on average. You need to reach technical evaluators, budget holders, and end users simultaneously.</p>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="challenge-card">
+                <div class="challenge-card-icon">💬</div>
+                <h3 class="challenge-card-title">Technical Objections</h3>
+                <p class="challenge-card-description">You need someone who can articulate your solution's technical benefits and answer deep technical questions from engineers and architects.</p>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="challenge-card">
+                <div class="challenge-card-icon">📊</div>
+                <h3 class="challenge-card-title">ROI Skepticism</h3>
+                <p class="challenge-card-description">Technical buyers demand proof. They want benchmarks, case studies, and concrete evidence that your solution delivers measurable value.</p>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="challenge-card">
+                <div class="challenge-card-icon">🔄</div>
+                <h3 class="challenge-card-title">Competing Priorities</h3>
+                <p class="challenge-card-description">Technical leaders juggle multiple priorities. Your solution competes with urgent operational issues and legacy system constraints.</p>
+            </div>
+        </div>
+    </section>
+    <!-- Case Study Section -->
+    <section class="case-section">
+        <div class="case-wrap">
+            <div class="case-left">
+                <div class="case-badge">MANUFACTURING</div>
+                <h3 class="case-title">Manufacturing Operations SaaS Platform</h3>
+                <p class="case-desc">Over 14 months, this manufacturing operations SaaS company partnered with SalesHive to build a repeatable outbound engine targeting mid-market manufacturers. By combining AI-personalized email outreach with US-based cold calling and a manufacturing-specific sales playbook, SalesHive...</p>
+
+                <div class="case-metrics">
+                    <div class="case-metric-box">
+                        <div class="case-metric-num">238</div>
+                        <div class="case-metric-label">Meetings Booked Total</div>
+                    </div>
+                    <div class="case-metric-box">
+                        <div class="case-metric-num">96</div>
+                        <div class="case-metric-label">Sales Qualified Opportunities Created</div>
+                    </div>
+                    <div class="case-metric-box">
+                        <div class="case-metric-num">19</div>
+                        <div class="case-metric-label">New Logos Closed-Won</div>
+                    </div>
+                    <div class="case-metric-box">
+                        <div class="case-metric-num">32</div>
+                        <div class="case-metric-label">Page Custom Manufacturing Sales Playbook</div>
+                    </div>
+                </div>
+
+                <a class="case-cta" href="#">READ FULL CASE STUDY →</a>
+            </div>
+
+            <div class="case-right">
+                <div>
+                    <div class="case-quote">"SalesHive finally gave us a predictable way to get in front of the right plant and operations leaders instead of hoping referrals would show up. The quality of the meetings and the visibility into their process made it feel like an extension of our own sales team."</div>
+
+                    <div class="case-author">
+                        <div class="case-avatar">VO</div>
+                        <div class="case-author-meta">
+                            <div style="font-weight:700">VP of Sales</div>
+                            <div style="font-size:0.85rem;color:#9a9a9a">Manufacturing Company</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating Chat Button -->
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="faq-badge">FAQS</div>
+        <h2 class="faq-title">Frequently Asked Questions</h2>
+
+        <div class="faq-container">
+            <div class="faq-item" tabindex="0" aria-expanded="false">
+                <div class="faq-question">
+                    <span>Why is outbound lead generation especially challenging for B2B SaaS companies, and how does SalesHive address those challenges?</span>
+                    <span class="faq-chevron">▾</span>
+                </div>
+                <div class="faq-answer">SalesHive combines domain research, technical discovery, and multi-threaded outreach to reach decision-makers. We tailor messaging to technical personas and use verified data to ensure outreach lands with the right stakeholders.</div>
+            </div>
+
+            <div class="faq-item" tabindex="0" aria-expanded="false">
+                <div class="faq-question">
+                    <span>Which SaaS buyer personas can SalesHive help us reach, and how do you build the contact lists?</span>
+                    <span class="faq-chevron">▾</span>
+                </div>
+                <div class="faq-answer">We target CTOs, VP Engineering, DevOps, Security, and procurement contacts. Lists are built using premium sources and manual verification to ensure data quality and relevance for your ICP.</div>
+            </div>
+
+            <div class="faq-item" tabindex="0" aria-expanded="false">
+                <div class="faq-question">
+                    <span>What does a typical B2B SaaS lead generation campaign with SalesHive include?</span>
+                    <span class="faq-chevron">▾</span>
+                </div>
+                <div class="faq-answer">Campaigns typically include technical discovery, personalized outreach sequences, human follow-up via US-based SDRs, and ongoing optimization based on engagement metrics and feedback.</div>
+            </div>
+
+            <div class="faq-item" tabindex="0" aria-expanded="false">
+                <div class="faq-question">
+                    <span>How quickly can we launch a SaaS lead generation campaign with SalesHive, and when will we see meetings?</span>
+                    <span class="faq-chevron">▾</span>
+                </div>
+                <div class="faq-answer">After discovery and list building, campaigns typically launch within 2–4 weeks. Initial meetings often surface within the first 4–8 weeks depending on vertical and campaign cadence.</div>
+            </div>
+
+            <div class="faq-item" tabindex="0" aria-expanded="false">
+                <div class="faq-question">
+                    <span>What kind of results do SaaS companies typically see with SalesHive's lead generation services?</span>
+                    <span class="faq-chevron">▾</span>
+                </div>
+                <div class="faq-answer">Clients commonly see a steady pipeline of qualified meetings, improved sales cycle predictability, and measurable SDR-driven pipeline growth tailored to their target accounts.</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Blog / Posts Section -->
+    <section class="blog-section">
+        <div class="blog-badge">B2B SALES BLOG</div>
+        <h2 class="blog-title">Recent Lead Generation Posts</h2>
+        <p class="blog-subtitle">Expert research and strategies for B2B sales success.</p>
+
+        <div class="blog-grid">
+            <article class="blog-card">
+                <div class="blog-image" style="background-image:url('https://images.unsplash.com/photo-1523293831700-2f3d5fd2b2a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80'); border-top-left-radius:14px; border-top-right-radius:14px;"></div>
+                <div class="blog-card-body">
+                    <div class="blog-badge">LEAD GENERATION</div>
+                    <h3 class="blog-card-title">Hiring Internally vs. Externally for Lead Gen Teams: A Strategic Guide for 2024</h3>
+                    <p class="blog-excerpt">Building a high-performing lead generation team is critical for driving revenue growth, but hiring the right talent remains one of...</p>
+                    <a class="blog-meta" href="#">Read post →</a>
+                </div>
+            </article>
+
+            <article class="blog-card">
+                <div class="blog-image" style="background-image:url('https://images.unsplash.com/photo-1508385082359-f3e7a32c6b3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80'); border-top-left-radius:14px; border-top-right-radius:14px;"></div>
+                <div class="blog-card-body">
+                    <div class="blog-badge">LEAD GENERATION</div>
+                    <h3 class="blog-card-title">Inbound Lead Generation: Strategies for Organic Growth in 2025</h3>
+                    <p class="blog-excerpt">In today’s hyper-competitive B2B landscape, businesses must adopt innovative strategies to attract high-quality leads organically. Inbound lead generation—the art of...</p>
+                    <a class="blog-meta" href="#">Read post →</a>
+                </div>
+            </article>
+
+            <article class="blog-card">
+                <div class="blog-image" style="background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80'); border-top-left-radius:14px; border-top-right-radius:14px;"></div>
+                <div class="blog-card-body">
+                    <div class="blog-badge">LEAD GENERATION</div>
+                    <h3 class="blog-card-title">The Benefits of a B2B Lead Generation Agency</h3>
+                    <p class="blog-excerpt">While word of mouth and referrals can do an excellent job for businesses, they alone are not enough. You have...</p>
+                    <a class="blog-meta" href="#">Read post →</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- CTA Booking Section -->
+    <section class="cta-section">
+        <div class="cta-badge">BOOK A CALL</div>
+        <h2 class="cta-title">Ready to Scale Your Pipeline?</h2>
+        <p class="cta-sub">Schedule a free strategy call with our sales development experts.</p>
+
+        <div class="cta-modal">
+            <div class="cta-top">SCHEDULE A MEETING TODAY!</div>
+            <div class="cta-body">
+                <div class="cta-left">
+                    <div style="text-align:center;margin-bottom:8px;"><div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#9c69f6,#d76ef6);display:inline-flex;align-items:center;justify-content:center;color:white;font-weight:700;">📅</div></div>
+                    <h4>Enter Your Details</h4>
+                    <input placeholder="Work Email*" type="email">
+                    <div style="display:flex;gap:10px;margin-bottom:12px;"><input placeholder="First Name*" style="flex:1;" type="text"><input placeholder="Last Name*" style="flex:1;" type="text"></div>
+                    <input placeholder="Job Title*" type="text">
+                    <input placeholder="Company Name*" type="text">
+                    <button class="cta-book-btn">BOOK MY CALL →</button>
+                </div>
+
+                <div class="cta-right">
+                    <div class="form-section-title">
+                        <div class="calendar-icon">📅</div>
+                        <span>Select Date &amp; Time</span>
+                    </div>
+                    <div class="calendar-header">
+                        <span class="calendar-month">December 2025</span>
+                        <div class="calendar-nav">
+                            <button>‹</button>
+                            <button>›</button>
+                        </div>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="day-header">MON</div>
+                        <div class="day-header">TUE</div>
+                        <div class="day-header">WED</div>
+                        <div class="day-header">THU</div>
+                        <div class="day-header">FRI</div>
+                        <div class="day-header">SAT</div>
+                        <div class="day-header">SUN</div>
+                        <div class="calendar-day" style="opacity: 0.5;">26</div>
+                        <div class="calendar-day" style="opacity: 0.5;">27</div>
+                        <div class="calendar-day" style="opacity: 0.5;">28</div>
+                        <div class="calendar-day" style="opacity: 0.5;">29</div>
+                        <div class="calendar-day" style="opacity: 0.5;">30</div>
+                        <div class="calendar-day">1</div>
+                        <div class="calendar-day">2</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <button class="floating-btn">💬</button>
+
+    <script>
+        // GSAP Animations
+        gsap.registerPlugin();
+
+        // Animate decision card on page load
+        gsap.from('.decision-card', {
+            duration: 0.8,
+            opacity: 0,
+            y: 30,
+            ease: 'power2.out'
+        });
+
+        // Hover animation for decision card
+        const decisionCard = document.querySelector('.decision-card');
+        decisionCard.addEventListener('mouseenter', function() {
+            gsap.to(this, {
+                duration: 0.3,
+                boxShadow: '0 16px 48px rgba(139, 92, 246, 0.25)',
+                y: -5,
+                ease: 'power2.out'
+            });
+        });
+
+        decisionCard.addEventListener('mouseleave', function() {
+            gsap.to(this, {
+                duration: 0.3,
+                boxShadow: '0 8px 32px rgba(139, 92, 246, 0.15)',
+                y: 0,
+                ease: 'power2.out'
+            });
+        });
+
+        // Animate list items on page load
+        gsap.from('.card-list li', {
+            duration: 0.6,
+            opacity: 0,
+            x: -20,
+            stagger: 0.1,
+            delay: 0.3,
+            ease: 'power2.out'
+        });
+
+        // Calendar functionality (multiple calendars support)
+        function renderCalendarForGrid(calendarGrid) {
+            if (!calendarGrid._currentDate) calendarGrid._currentDate = new Date(2025, 11, 25);
+            const currentDate = calendarGrid._currentDate;
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            // Update month display (find month label within same parent)
+            const header = calendarGrid.parentElement.querySelector('.calendar-header');
+            const monthLabel = header ? header.querySelector('.calendar-month') : null;
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+            if (monthLabel) monthLabel.textContent = `${monthNames[month]} ${year}`;
+
+            // Get first day of month and number of days
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+            // Keep day headers
+            const dayHeaders = calendarGrid.querySelectorAll('.day-header');
+            calendarGrid.innerHTML = '';
+            dayHeaders.forEach(headerEl => calendarGrid.appendChild(headerEl.cloneNode(true)));
+
+            // Add previous month's days
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day';
+                day.style.opacity = '0.5';
+                day.textContent = daysInPrevMonth - i;
+                calendarGrid.appendChild(day);
+            }
+
+            // Add current month's days
+            for (let i = 1; i <= daysInMonth; i++) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day';
+                day.textContent = i;
+
+                // Highlight today if matches real today
+                const today = new Date();
+                if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                    day.classList.add('today');
+                }
+
+                day.style.cursor = 'pointer';
+                day.addEventListener('click', function() {
+                    calendarGrid.querySelectorAll('.calendar-day.today').forEach(d => d.classList.remove('today'));
+                    this.classList.add('today');
+                    calendarGrid._currentDate.setDate(i);
+                });
+
+                calendarGrid.appendChild(day);
+            }
+
+            // Add next month's days to fill 6 rows
+            const totalCells = calendarGrid.children.length - 7; // Subtract day headers
+            const remainingCells = 42 - totalCells;
+            for (let i = 1; i <= remainingCells; i++) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day';
+                day.style.opacity = '0.5';
+                day.textContent = i;
+                calendarGrid.appendChild(day);
+            }
+        }
+
+        function initCalendars() {
+            document.querySelectorAll('.calendar-grid').forEach(calendarGrid => {
+                if (!calendarGrid._currentDate) calendarGrid._currentDate = new Date(2025, 11, 25);
+                renderCalendarForGrid(calendarGrid);
+
+                // Bind nav buttons for this calendar (within same parent)
+                const header = calendarGrid.parentElement.querySelector('.calendar-header');
+                if (!header) return;
+                const navButtons = header.querySelectorAll('.calendar-nav button');
+                if (navButtons.length >= 2) {
+                    navButtons[0].onclick = () => {
+                        calendarGrid._currentDate.setMonth(calendarGrid._currentDate.getMonth() - 1);
+                        renderCalendarForGrid(calendarGrid);
+                    };
+                    navButtons[1].onclick = () => {
+                        calendarGrid._currentDate.setMonth(calendarGrid._currentDate.getMonth() + 1);
+                        renderCalendarForGrid(calendarGrid);
+                    };
+                }
+            });
+        }
+
+        // Initialize all calendars on the page
+        initCalendars();
+
+        // FAQ accordion behavior
+        document.querySelectorAll('.faq-item').forEach(item => {
+            const question = item.querySelector('.faq-question');
+            const answer = item.querySelector('.faq-answer');
+            const chevron = item.querySelector('.faq-chevron');
+
+            function toggle() {
+                const isOpen = item.classList.toggle('open');
+                item.setAttribute('aria-expanded', String(isOpen));
+                if (isOpen) {
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                } else {
+                    answer.style.maxHeight = null;
+                }
+            }
+
+            question.addEventListener('click', toggle);
+            item.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+            });
+        });
+        
+        // Mobile navigation toggle
+        (function(){
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            if (!hamburger || !navLinks) return;
+
+            function closeNav() {
+                navLinks.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+            }
+
+            function openNav() {
+                navLinks.classList.add('open');
+                hamburger.setAttribute('aria-expanded', 'true');
+                document.body.style.overflow = 'hidden';
+            }
+
+            hamburger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = navLinks.classList.toggle('open');
+                hamburger.setAttribute('aria-expanded', String(isOpen));
+                document.body.style.overflow = isOpen ? 'hidden' : '';
+                document.documentElement.style.overflowX = isOpen ? 'hidden' : '';
+            });
+
+            // Close the menu when a navigation link is clicked (useful on mobile)
+            navLinks.querySelectorAll('a').forEach(a => {
+                a.addEventListener('click', () => {
+                    closeNav();
+                });
+            });
+
+            // Close when user clicks outside the menu
+            document.addEventListener('click', (e) => {
+                if (!navLinks.contains(e.target) && !hamburger.contains(e.target) && navLinks.classList.contains('open')) {
+                    closeNav();
+                }
+            });
+
+            // Close on Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && navLinks.classList.contains('open')) closeNav();
+            });
+
+            // Reset on resize to larger screens
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 900 && navLinks.classList.contains('open')) {
+                    closeNav();
+                }
+            });
+        })();
+    </script>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-top-bar"></div>
+        <div class="footer-content">
+            <div class="footer-col footer-brand">
+                <div class="footer-logo">SalesHive</div>
+                <div class="footer-desc">Modern B2B lead generation for SaaS. Predictable pipeline, real results.</div>
+                <div class="footer-contact">
+                    <div><strong>Email:</strong> <a href="mailto:hello@saleshive.com">hello@saleshive.com</a></div>
+                    <div><strong>Phone:</strong> <a href="tel:+1234567890">(123) 456-7890</a></div>
+                </div>
+            </div>
+            <div class="footer-col footer-links">
+                <div class="footer-col-title">Company</div>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col footer-links">
+                <div class="footer-col-title">Services</div>
+                <ul>
+                    <li><a href="#">Lead Generation</a></li>
+                    <li><a href="#">Appointment Setting</a></li>
+                    <li><a href="#">Sales Consulting</a></li>
+                    <li><a href="#">API Access</a></li>
+                </ul>
+            </div>
+            <div class="footer-col footer-links">
+                <div class="footer-col-title">Resources</div>
+                <ul>
+                    <li><a href="#">Case Studies</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-api-bar">
+            <div class="footer-api-label">API Status:</div>
+            <div class="footer-api-status online"></div>
+            <div class="footer-api-text">All systems operational</div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copyright">&copy; 2024 SalesHive. All rights reserved.</div>
+            <div class="footer-socials">
+                <a href="#" aria-label="Twitter" class="footer-social"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path fill="#8b5cf6" d="M22.46 5.924c-.793.352-1.646.59-2.54.698a4.48 4.48 0 0 0 1.965-2.475 8.94 8.94 0 0 1-2.828 1.082A4.48 4.48 0 0 0 16.11 4c-2.48 0-4.49 2.01-4.49 4.49 0 .352.04.695.116 1.022C7.728 9.36 4.1 7.5 1.67 4.87c-.387.664-.61 1.437-.61 2.26 0 1.56.795 2.94 2.01 3.75-.738-.023-1.432-.226-2.04-.563v.057c0 2.18 1.55 4 3.61 4.42-.377.104-.775.16-1.185.16-.29 0-.57-.027-.845-.08.57 1.78 2.23 3.08 4.2 3.12A8.98 8.98 0 0 1 2 19.54c-.65 0-1.29-.038-1.92-.112A12.7 12.7 0 0 0 7.29 21.5c8.39 0 12.98-6.95 12.98-12.98 0-.198-.004-.395-.013-.59A9.23 9.23 0 0 0 24 4.59a8.98 8.98 0 0 1-2.54.698z"/></svg></a>
+                <a href="#" aria-label="LinkedIn" class="footer-social"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path fill="#8b5cf6" d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-9h3v9zm-1.5-10.28c-.97 0-1.75-.79-1.75-1.75s.78-1.75 1.75-1.75 1.75.79 1.75 1.75-.78 1.75-1.75 1.75zm15.5 10.28h-3v-4.5c0-1.08-.02-2.47-1.5-2.47-1.5 0-1.73 1.17-1.73 2.39v4.58h-3v-9h2.88v1.23h.04c.4-.75 1.38-1.54 2.84-1.54 3.04 0 3.6 2 3.6 4.59v4.72z"/></svg></a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
